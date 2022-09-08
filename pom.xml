@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.gft.pw</groupId>
+	<artifactId>canvas</artifactId>
+	<version>1.0</version>
+	<name>canvas</name>
+	<description>Canvas exercise</description>
+
+	<properties>
+	     <maven.compiler.source>14</maven.compiler.source>
+    	 <maven.compiler.target>14</maven.compiler.target>
+		<java.version>14</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<junit.jupiter.version>5.9.0</junit.jupiter.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+		    <groupId>org.junit.jupiter</groupId>
+		    <artifactId>junit-jupiter-api</artifactId>
+		    <version>${junit.jupiter.version}</version>
+		    <scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>  
+	    <plugins>  
+	        <plugin>  
+	            <!-- Build an executable JAR -->  
+	            <groupId>org.apache.maven.plugins</groupId>  
+	            <artifactId>maven-jar-plugin</artifactId>  
+	            <version>3.2.2</version>  
+	            <configuration>  
+	                <archive>  
+	                    <manifest>  
+	                        <mainClass>com.gft.pw.canvas.Easel</mainClass>  
+	                    </manifest>  
+	                </archive>  
+	            </configuration>  
+	        </plugin>  
+	    </plugins>  
+	</build>  
+
+</project>
