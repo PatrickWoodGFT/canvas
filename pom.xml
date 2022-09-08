@@ -14,6 +14,7 @@
 		<java.version>14</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<junit.jupiter.version>5.9.0</junit.jupiter.version>
+		<main.class>com.gft.pw.canvas.Easel</main.class>
 	</properties>
 
 	<dependencies>
@@ -35,11 +36,20 @@
 	            <configuration>  
 	                <archive>  
 	                    <manifest>  
-	                        <mainClass>com.gft.pw.canvas.Easel</mainClass>  
+	                        <mainClass>${main.class}</mainClass>  
 	                    </manifest>  
 	                </archive>  
 	            </configuration>  
 	        </plugin>  
+	        <plugin>
+	        	<!-- ... or run straight fromt he command line with mvn compile exec:java -->
+	            <groupId>org.codehaus.mojo</groupId>
+	            <artifactId>exec-maven-plugin</artifactId>
+	            <version>3.1.0</version>
+	            <configuration>
+	                <mainClass>${main.class}</mainClass>
+	            </configuration>
+	        </plugin>
 	    </plugins>  
 	</build>  
 
