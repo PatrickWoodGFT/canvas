@@ -37,7 +37,7 @@ public class CanvasTest {
 	}
 
 	@Test
-	public void testLineRegExp() throws LineConfigurationException {
+	public void testLineRegExp() throws LineConfigurationException, EaselException {
 		Stream.of("", "xyz", "c 1 2", "L 1 2 3", "L one 2 3 4", "L -1 2 -1 4").forEach(badConfigStr ->
 			Assertions.assertThrows(LineConfigurationException.class, () -> {
 				new Line(badConfigStr);
@@ -57,7 +57,7 @@ public class CanvasTest {
 	}
 
 	@Test
-	public void testRectRegExp() throws RectConfigurationException {
+	public void testRectRegExp() throws RectConfigurationException, EaselException {
 		Stream.of("", "xyz", "C 1 2", "L 1", "L 1 2 3 4", "R one 2 3 4", "R 1 2 3").forEach(badConfigStr ->
 			Assertions.assertThrows(RectConfigurationException.class, () -> {
 				new Rect(badConfigStr);
@@ -98,6 +98,17 @@ public class CanvasTest {
 		Canvas canvas = new Canvas(new CanvasConfig("C 18 14"));
 		Assertions.assertThrows(EaselException.class, () -> {
 			canvas.add(new Line("L 1 1 1 19"));
+		}, "EaselException expected");
+	}
+
+	@Test
+	public void testZeroCoords() throws LineConfigurationException, EaselException {
+		Canvas canvas = new Canvas(new CanvasConfig("C 18 14"));
+		Assertions.assertThrows(EaselException.class, () -> {
+			canvas.add(new Line("L 0 0 0 0"));
+		}, "EaselException expected");
+		Assertions.assertThrows(EaselException.class, () -> {
+			canvas.add(new Rect("R 0 1 10 10"));
 		}, "EaselException expected");
 	}
 }

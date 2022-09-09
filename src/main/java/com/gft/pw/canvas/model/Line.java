@@ -5,12 +5,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
+import com.gft.pw.canvas.exception.EaselException;
 import com.gft.pw.canvas.exception.LineConfigurationException;
 
 /**
  * Class to create and hold information about a line. Parses a string of the form
  * L n1 n2 n3 n4
- * and ensures it represents a line that is either vertical or horizontal.
+ * and ensures it represents a line that is either vertical or horizontal and
+ * has start coordinates both greater than 0.
  * 
  * @author pkwd
  */
@@ -21,7 +23,7 @@ public class Line implements Renderable {
 	
 	private static final Pattern FORMAT_PATTERN = Pattern.compile("^\\s*L\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)$");
 
-	public Line(String lineConfigStr) throws LineConfigurationException {
+	public Line(String lineConfigStr) throws LineConfigurationException, EaselException {
 		Matcher matcher = FORMAT_PATTERN.matcher(lineConfigStr);
 		if (!matcher.find()) {
 			throw new LineConfigurationException();
@@ -54,12 +56,14 @@ public class Line implements Renderable {
 		return getEndY();
 	}
 
-	private void setOrientation() throws LineConfigurationException {
+	private void setOrientation() throws LineConfigurationException, EaselException {
 		// check that the line is either vertical or horizontal
 		if (startX != endX && startY != endY) {
 			throw new LineConfigurationException("Line must be either vertical or horizontal");
 		} else if (startX > endX || startY > endY) {
 			throw new LineConfigurationException();
+		} else if (startX < 1 || startY < 1) {
+			throw new EaselException("Canvas boundary exceeded");
 		} else {
 			orientation = startX == endX ? LineOrientation.VERTICAL : LineOrientation.HORIZONTAL;
 		}

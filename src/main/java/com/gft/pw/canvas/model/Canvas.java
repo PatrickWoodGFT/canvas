@@ -25,6 +25,9 @@ public class Canvas {
 	private static char linePixel = 'X';
 	private static int slowPrintSleepTime = 10;
 	
+	private static String red = "\u001B[31m";
+	private static String reset = "\u001B[0m";
+	
 	private List<Renderable> renderables = new ArrayList<>();
 	
 	/**
@@ -38,7 +41,7 @@ public class Canvas {
 	private CanvasConfig canvasConfig;
 
 	/**
-	 * Creates a Canavs object with the dimensions in the given configuration
+	 * Creates a Canvas object with the dimensions in the given configuration
 	 * and populates a pixel matrix in which all the elements are false,
 	 * denoting that the canvas starts off blank.
 	 * 
@@ -46,6 +49,10 @@ public class Canvas {
 	 */
 	public Canvas(CanvasConfig canvasConfig) {
 		this.canvasConfig = canvasConfig;
+		init();
+	}
+
+	private void init() {
 		pixelMatrix = new HashMap<>();
 		IntStream.range(1, canvasConfig.getHeight() + 1).forEach(i -> {
 			Map<Integer, Boolean> map = new HashMap<>();
@@ -53,7 +60,7 @@ public class Canvas {
 			pixelMatrix.put(i, map);	
 		});
 	}
-
+	
 	/**
 	 * Prints out the frame of the canvas and fills in the pixels within based on
 	 * the renderable objects that have been added to the canvas.
@@ -77,8 +84,14 @@ public class Canvas {
 		out.print("\n");
 	}
 	
-	private char getMatrixValue(int i, int j) {
-		return pixelMatrix.get(i).get(j) ? linePixel : ' ';
+	private String getMatrixValue(int i, int j) {
+		return decorate(pixelMatrix.get(i).get(j) ? linePixel : ' ');
+	}
+	
+	private String decorate(char ch) {
+		return canvasConfig.decorate() 
+				? (' ' != ch ? red + ch : reset + ' ')
+				: "" + ch;
 	}
 
 	public void add(Renderable renderable) throws EaselException {
@@ -88,6 +101,18 @@ public class Canvas {
 		} else {
 			renderables.add(renderable);
 			renderable.render(pixelMatrix);
+		}
+	}
+	
+	public boolean isPopulated() {
+		return renderables.size() > 0;
+	}
+
+	public void undo() {
+		if (renderables != null && renderables.size() > 0) {
+			init();
+			renderables.remove(renderables.size() - 1);
+			renderables.forEach(renderable -> renderable.render(pixelMatrix));
 		}
 	}
 	

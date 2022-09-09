@@ -48,6 +48,9 @@
 	            <version>3.1.0</version>
 	            <configuration>
 	                <mainClass>${main.class}</mainClass>
+				    <arguments>
+				        <argument>c</argument>
+				    </arguments>
 	            </configuration>
 	        </plugin>
 	    </plugins>  

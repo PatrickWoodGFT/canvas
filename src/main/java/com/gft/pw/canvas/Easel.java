@@ -23,10 +23,15 @@ import static com.gft.pw.canvas.Helper.showHelp;
 public class Easel {
 
 	private Canvas canvas;
+	private String[] args;
 	
+	public Easel(String[] args) {
+		this.args = args;
+	}
+
 	public static void main(String[] args) {
 		showIntro();
-		new Easel().setup();
+		new Easel(args).setup();
 	}
 	
 	/**
@@ -58,7 +63,7 @@ public class Easel {
 					showHelp();
 				}
 				case 'C' -> {
-					canvas = new Canvas(new CanvasConfig(input));
+					canvas = new Canvas(new CanvasConfig(input, args));
 					canvas.render(System.out);
 				}
 				case 'L' -> {
@@ -74,6 +79,16 @@ public class Easel {
 						showCanvasCreationFormat();
 					} else {
 						canvas.add(new Rect(input));
+						canvas.render(System.out);
+					}
+				}
+				case 'U' -> {
+					if (canvas == null) {
+						showCanvasCreationFormat();
+					} else if (!canvas.isPopulated()) {
+						canvas = null;
+					} else {
+						canvas.undo();
 						canvas.render(System.out);
 					}
 				}

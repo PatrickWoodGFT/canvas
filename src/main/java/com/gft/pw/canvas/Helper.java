@@ -14,6 +14,7 @@ public class Helper {
 		System.out.println("To create a canvas, type C <width_in_chars> <height_in_lines>");
 		System.out.println("Then, to draw a horizontal or vertical line, type L <start_x> <start_y> <end_x> <end_y>");
 		System.out.println("To draw a rectangle, type R <top_left_x> <top_left_y> <bottom_right_x> <bottom_right_y>");
+		System.out.println("To undo the last action, type U");
 		System.out.println("To quit the program type Q");
 	}
 

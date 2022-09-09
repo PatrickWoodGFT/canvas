@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.gft.pw.canvas.exception.EaselException;
 import com.gft.pw.canvas.exception.LineConfigurationException;
 import com.gft.pw.canvas.exception.RectConfigurationException;
 
@@ -12,6 +13,8 @@ import com.gft.pw.canvas.exception.RectConfigurationException;
  * R n1 n2 n3 n4
  * where n1 and n2 are the coordinates of the top-left corner of the rectangle
  * and n3 and n4 are the coordinates of the bottom-right corner.
+ * 
+ * The top-left coordinates must both be greater than 0.
  * 
  * Degenerate rectangles, ie lines and points, are allowed.
  *
@@ -23,7 +26,7 @@ public class Rect implements Renderable {
 
 	private static final Pattern FORMAT_PATTERN = Pattern.compile("^\\s*R\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)$");
 
-	public Rect(String lineConfigStr) throws RectConfigurationException {
+	public Rect(String lineConfigStr) throws RectConfigurationException, EaselException {
 		Matcher matcher = FORMAT_PATTERN.matcher(lineConfigStr);
 		if (!matcher.find()) {
 			throw new RectConfigurationException();
@@ -34,6 +37,8 @@ public class Rect implements Renderable {
 			this.bottomRightY = Integer.parseInt(matcher.group(4));
 			if (topLeftX > bottomRightX || topLeftY > bottomRightY) {
 				throw new RectConfigurationException("The bottom-right coordinate of a rectangle should be south east of the top-left coordinate");
+			} else if (topLeftX < 1 || topLeftY < 1) {
+				throw new EaselException("Canvas boundary exceeded");
 			}
 		}
 	}
@@ -50,7 +55,7 @@ public class Rect implements Renderable {
 			new Line(String.format("L %s %s %s %s", getBottomRightX(), getTopLeftY(), getBottomRightX(), getBottomRightY())).render(pixelMatrix);
 			// bottom
 			new Line(String.format("L %s %s %s %s", getTopLeftX(), getBottomRightY(), getBottomRightX(), getBottomRightY())).render(pixelMatrix);
-		} catch (LineConfigurationException e) {
+		} catch (EaselException e) {
 			// shouldn't happen because the rectangle is already known to be correctly configured
 			e.printStackTrace();
 		}
